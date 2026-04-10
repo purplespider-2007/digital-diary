@@ -53,7 +53,7 @@ window.login = function() {
     .then(() => {
       alert("Login successful ✅");
       localStorage.setItem("loggedIn", "true");
-      window.location.href = "index.html";
+      window.location.href = "./index.html";
     })
     .catch(err => alert(err.message));
 };
