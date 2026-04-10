@@ -1,0 +1,63 @@
+body {
+  font-family: Arial;
+  margin: 0;
+  background: #f4f4f4;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  background: teal;
+  color: white;
+  padding: 10px 20px;
+}
+
+.container {
+  max-width: 400px;
+  margin: 20px auto;
+  display: flex;
+  flex-direction: column;
+}
+
+input, textarea, select, button {
+  margin: 5px 0;
+  padding: 10px;
+}
+
+button {
+  background: teal;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.entry {
+  background: white;
+  margin: 10px auto;
+  padding: 10px;
+  max-width: 400px;
+  border-radius: 10px;
+}
+
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.card {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+/* 🌙 Dark Mode */
+.dark {
+  background: #121212;
+  color: white;
+}
+
+.dark .entry {
+  background: #1e1e1e;
+}

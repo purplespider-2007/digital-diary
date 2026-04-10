@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Login</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="center">
+
+<div class="card">
+  <h2>🔐 Login to Diary</h2>
+  <input type="password" id="password" placeholder="Enter password">
+  <button onclick="checkLogin()">Login</button>
+</div>
+
+<script>
+function checkLogin() {
+  const pass = document.getElementById("password").value;
+
+  if (pass === "1234") {
+    localStorage.setItem("auth", "true");
+    window.location.href = "index.html";
+  } else {
+    alert("Wrong password");
+  }
+}
+</script>
+
+</body>
+</html>

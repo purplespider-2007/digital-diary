@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Digital Diary</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+  <h1>📔 Digital Diary</h1>
+  <button onclick="toggleDarkMode()">🌙</button>
+</header>
+
+<div class="container">
+  <input id="title" placeholder="Title">
+  <textarea id="entry" placeholder="Write something..."></textarea>
+
+  <select id="mood">
+    <option>😊</option>
+    <option>😐</option>
+    <option>😢</option>
+    <option>😡</option>
+  </select>
+
+  <button onclick="addEntry()">Save</button>
+</div>
+
+<div id="entries"></div>
+
+<script src="script.js"></script>
+</body>
+</html>
