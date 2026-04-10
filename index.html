@@ -2,35 +2,181 @@
 <html>
 <head>
   <title>Digital Diary</title>
-  <link rel="stylesheet" href="style.css">
 </head>
-<body>
+
+<body style="margin:0; font-family: Arial; background:#f4f6f9;">
+
+<!-- 🔐 Login Protection -->
 <script>
   if (!localStorage.getItem("loggedIn")) {
     window.location.href = "login.html";
   }
 </script>
-<header>
-  <h1>📔 Digital Diary</h1>
-  <button onclick="toggleDarkMode()">🌙</button>
-</header>
 
-<div class="container">
-  <input id="title" placeholder="Title">
-  <textarea id="entry" placeholder="Write something..."></textarea>
-
-  <select id="mood">
-    <option>😊</option>
-    <option>😐</option>
-    <option>😢</option>
-    <option>😡</option>
-  </select>
-
-  <button onclick="addEntry()">Save</button>
+<!-- HEADER -->
+<div style="
+  background: linear-gradient(135deg, #1e3c72, #2a5298);
+  color: white;
+  padding: 15px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+">
+  <h2>📘 Digital Diary</h2>
+  <button onclick="logout()" style="
+    padding:8px 12px;
+    background:red;
+    color:white;
+    border:none;
+    border-radius:6px;
+    cursor:pointer;
+  ">Logout</button>
 </div>
 
-<div id="entries"></div>
+<!-- MAIN CONTAINER -->
+<div style="
+  display:flex;
+  justify-content:center;
+  margin-top:30px;
+">
 
-<script src="script.js"></script>
+  <div style="
+    background:white;
+    padding:25px;
+    border-radius:12px;
+    width:350px;
+    box-shadow:0 6px 15px rgba(0,0,0,0.1);
+  ">
+
+    <input id="title" placeholder="Title" style="
+      width:100%;
+      padding:10px;
+      margin-bottom:10px;
+      border-radius:6px;
+      border:1px solid #ccc;
+    ">
+
+    <textarea id="content" placeholder="Write something..." style="
+      width:100%;
+      padding:10px;
+      height:80px;
+      margin-bottom:10px;
+      border-radius:6px;
+      border:1px solid #ccc;
+    "></textarea>
+
+    <select id="mood" style="
+      width:100%;
+      padding:10px;
+      margin-bottom:10px;
+      border-radius:6px;
+    ">
+      <option>😊 Happy</option>
+      <option>😢 Sad</option>
+      <option>😡 Angry</option>
+      <option>😴 Tired</option>
+    </select>
+
+    <button onclick="saveEntry()" style="
+      width:100%;
+      padding:10px;
+      background:#2a5298;
+      color:white;
+      border:none;
+      border-radius:6px;
+      cursor:pointer;
+    ">Save</button>
+
+  </div>
+</div>
+
+<!-- 📜 ENTRIES LIST -->
+<div id="entries" style="
+  max-width:600px;
+  margin:30px auto;
+"></div>
+
+<!-- SCRIPT -->
+<script>
+
+function saveEntry() {
+  const title = document.getElementById("title").value;
+  const content = document.getElementById("content").value;
+  const mood = document.getElementById("mood").value;
+
+  if (!title || !content) {
+    alert("Please fill all fields!");
+    return;
+  }
+
+  const entry = {
+    title,
+    content,
+    mood,
+    date: new Date().toLocaleString()
+  };
+
+  let entries = JSON.parse(localStorage.getItem("diaryEntries")) || [];
+  entries.push(entry);
+
+  localStorage.setItem("diaryEntries", JSON.stringify(entries));
+
+  alert("Saved successfully ✅");
+
+  document.getElementById("title").value = "";
+  document.getElementById("content").value = "";
+
+  displayEntries();
+}
+
+function displayEntries() {
+  const container = document.getElementById("entries");
+  let entries = JSON.parse(localStorage.getItem("diaryEntries")) || [];
+
+  container.innerHTML = "";
+
+  entries.forEach((e, index) => {
+    container.innerHTML += `
+      <div style="
+        background:white;
+        padding:15px;
+        margin-bottom:10px;
+        border-radius:10px;
+        box-shadow:0 4px 10px rgba(0,0,0,0.1);
+      ">
+        <h3>${e.title}</h3>
+        <p>${e.content}</p>
+        <small>${e.mood} | ${e.date}</small><br><br>
+        <button onclick="deleteEntry(${index})" style="
+          background:red;
+          color:white;
+          border:none;
+          padding:5px 10px;
+          border-radius:5px;
+          cursor:pointer;
+        ">Delete</button>
+      </div>
+    `;
+  });
+}
+
+function deleteEntry(index) {
+  let entries = JSON.parse(localStorage.getItem("diaryEntries")) || [];
+  entries.splice(index, 1);
+  localStorage.setItem("diaryEntries", JSON.stringify(entries));
+  displayEntries();
+}
+
+function logout() {
+  localStorage.removeItem("loggedIn");
+  window.location.href = "login.html";
+}
+
+// Load entries on page load
+displayEntries();
+
+</script>
+
 </body>
 </html>
+
