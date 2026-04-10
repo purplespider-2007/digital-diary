@@ -1,28 +1,62 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Login</title>
-  <link rel="stylesheet" href="style.css">
+  <title>Login / Signup</title>
 </head>
-<body class="center">
 
-<div class="card">
-  <h2>🔐 Login to Diary</h2>
-  <input type="password" id="password" placeholder="Enter password">
-  <button onclick="checkLogin()">Login</button>
-</div>
+<body>
 
-<script>
-function checkLogin() {
+<h2>🔐 Login / Signup</h2>
+
+<input type="email" id="email" placeholder="Enter Email"><br><br>
+<input type="password" id="password" placeholder="Enter Password"><br><br>
+
+<button onclick="signup()">Sign Up</button>
+<button onclick="login()">Login</button>
+
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } 
+from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+// 🔴 PASTE YOUR FIREBASE CONFIG HERE
+const firebaseConfig = {
+  apiKey: "AIzaSyBTckFdWrV_zVnIPwU6BZHvFNOR8nOz06Q",
+  authDomain: "digital-diary-897cf.firebaseapp.com",
+  projectId: "digital-diary-897cf",
+  storageBucket: "digital-diary-897cf.firebasestorage.app",
+  messagingSenderId: "479240824749",
+  appId: "1:479240824749:web:680a57e92a7536d920e324",
+  measurementId: "G-6Q32L2NX6W"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+// ✅ SIGN UP
+window.signup = function() {
+  const email = document.getElementById("email").value;
   const pass = document.getElementById("password").value;
 
-  if (pass === "1234") {
-    localStorage.setItem("auth", "true");
-    window.location.href = "index.html";
-  } else {
-    alert("Wrong password");
-  }
-}
+  createUserWithEmailAndPassword(auth, email, pass)
+    .then(() => alert("Signup successful ✅"))
+    .catch(err => alert(err.message));
+};
+
+// ✅ LOGIN
+window.login = function() {
+  const email = document.getElementById("email").value;
+  const pass = document.getElementById("password").value;
+
+  signInWithEmailAndPassword(auth, email, pass)
+    .then(() => {
+      alert("Login successful ✅");
+      window.location.href = "index.html";
+    })
+    .catch(err => alert(err.message));
+};
+
 </script>
 
 </body>
