@@ -23,10 +23,11 @@
 
   <h3>📘 Diary</h3>
 
-  <p>📥 All Entries</p>
-  <p>📅 Today</p>
-  <p>😊 Happy</p>
-  <p>😢 Sad</p>
+  <p onclick="filterEntries('all')" style="cursor:pointer;">📥 All Entries</p>
+  <p onclick="filterEntries('today')" style="cursor:pointer;">📅 Today</p>
+  <p onclick="filterEntries('happy')" style="cursor:pointer;">😊 Happy</p>
+  <p onclick="filterEntries('sad')" style="cursor:pointer;">😢 Sad</p>
+  <p onclick="filterEntries('angry')" style="cursor:pointer;">😡 Angry</p>
 
   <button onclick="logout()" style="
     margin-top:20px;
@@ -71,6 +72,16 @@
       border:1px solid #ccc;
     "></textarea>
 
+    <!-- 📅 DATE PICKER -->
+    <input type="date" id="date" style="
+      width:100%;
+      padding:10px;
+      margin-bottom:10px;
+      border-radius:6px;
+      border:1px solid #ccc;
+    ">
+
+    <!-- 😊 MOOD -->
     <select id="mood" style="padding:8px; border-radius:6px;">
       <option>😊 Happy</option>
       <option>😢 Sad</option>
@@ -98,14 +109,25 @@
 <script>
 
 let editIndex = -1;
+let currentFilter = "all";
 
-// ➕ SAVE / UPDATE ENTRY
+// 📅 FORMAT DATE
+function formatDate(dateString) {
+  const d = new Date(dateString);
+  const day = String(d.getDate()).padStart(2, '0');
+  const month = String(d.getMonth() + 1).padStart(2, '0');
+  const year = d.getFullYear();
+  return `${day}/${month}/${year}`;
+}
+
+// ➕ SAVE / UPDATE
 function saveEntry() {
   const title = document.getElementById("title").value;
   const content = document.getElementById("content").value;
   const mood = document.getElementById("mood").value;
+  const dateInput = document.getElementById("date").value;
 
-  if (!title || !content) {
+  if (!title || !content || !dateInput) {
     alert("Fill all fields");
     return;
   }
@@ -116,7 +138,7 @@ function saveEntry() {
     title,
     content,
     mood,
-    date: new Date().toLocaleString()
+    date: dateInput
   };
 
   if (editIndex !== -1) {
@@ -131,18 +153,27 @@ function saveEntry() {
 
   document.getElementById("title").value = "";
   document.getElementById("content").value = "";
+  document.getElementById("date").value = "";
 
   displayEntries();
 }
 
-// 📄 DISPLAY ENTRIES
+// 📄 DISPLAY + FILTER
 function displayEntries() {
   const container = document.getElementById("entries");
   let entries = JSON.parse(localStorage.getItem("diaryEntries")) || [];
 
   container.innerHTML = "";
 
+  const today = new Date().toISOString().split("T")[0];
+
   entries.reverse().forEach((e, i) => {
+
+    if (currentFilter === "today" && e.date !== today) return;
+    if (currentFilter === "happy" && !e.mood.includes("Happy")) return;
+    if (currentFilter === "sad" && !e.mood.includes("Sad")) return;
+    if (currentFilter === "angry" && !e.mood.includes("Angry")) return;
+
     container.innerHTML += `
       <div style="
         background:white;
@@ -153,7 +184,7 @@ function displayEntries() {
       ">
         <b>${e.title}</b>
         <p>${e.content}</p>
-        <small>${e.mood} | ${e.date}</small><br><br>
+        <small>${e.mood} | ${formatDate(e.date)}</small><br><br>
 
         <button onclick="editEntry(${i})" style="
           margin-right:10px;
@@ -178,7 +209,7 @@ function displayEntries() {
   });
 }
 
-// ✏️ EDIT ENTRY
+// ✏️ EDIT
 function editEntry(index) {
   let entries = JSON.parse(localStorage.getItem("diaryEntries")) || [];
 
@@ -188,13 +219,14 @@ function editEntry(index) {
   document.getElementById("title").value = entry.title;
   document.getElementById("content").value = entry.content;
   document.getElementById("mood").value = entry.mood;
+  document.getElementById("date").value = entry.date;
 
   editIndex = actualIndex;
 
   document.getElementById("saveBtn").innerText = "Update";
 }
 
-// 🗑️ DELETE ENTRY
+// 🗑 DELETE
 function deleteEntry(index) {
   let entries = JSON.parse(localStorage.getItem("diaryEntries")) || [];
 
@@ -202,7 +234,12 @@ function deleteEntry(index) {
   entries.splice(actualIndex, 1);
 
   localStorage.setItem("diaryEntries", JSON.stringify(entries));
+  displayEntries();
+}
 
+// 🎯 FILTER
+function filterEntries(type) {
+  currentFilter = type;
   displayEntries();
 }
 
@@ -212,11 +249,10 @@ function logout() {
   window.location.href = "login.html";
 }
 
-// LOAD DATA
+// LOAD
 displayEntries();
 
 </script>
 
 </body>
 </html>
-
