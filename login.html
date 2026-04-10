@@ -52,6 +52,7 @@ window.login = function() {
   signInWithEmailAndPassword(auth, email, pass)
     .then(() => {
       alert("Login successful ✅");
+      localStorage.setItem("loggedIn", "true");
       window.location.href = "index.html";
     })
     .catch(err => alert(err.message));
