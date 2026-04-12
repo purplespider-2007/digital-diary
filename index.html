@@ -6,14 +6,14 @@
 
 <body style="margin:0; font-family: Arial; display:flex; height:100vh;">
 
-<!-- 🔐 Login Protection -->
+<!--  Login Protection -->
 <script>
   if (!localStorage.getItem("loggedIn")) {
     window.location.href = "login.html";
   }
 </script>
 
-<!-- 🔴 SIDEBAR -->
+<!--  SIDEBAR -->
 <div style="
   width:220px;
   background:#202020;
@@ -21,7 +21,7 @@
   padding:20px;
 ">
 
-  <h3>📘 Diary</h3>
+  <h3> Diary</h3>
 
   <p onclick="filterEntries('all')" style="cursor:pointer;">📥 All Entries</p>
   <p onclick="filterEntries('today')" style="cursor:pointer;">📅 Today</p>
@@ -42,7 +42,7 @@
 
 </div>
 
-<!-- 🟢 MAIN AREA -->
+<!-- MAIN AREA -->
 <div style="flex:1; padding:20px; background:#f5f5f5;">
 
   <h2>My Diary</h2>
